@@ -52,7 +52,7 @@ const valueSelectors: Suggestions = [
   {
     type: 'value',
     value: '$message',
-    description: 'The event message'
+    description: 'The event message',
   },
   {
     type: 'value',
