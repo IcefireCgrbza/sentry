@@ -2,87 +2,77 @@ const valueSelectors: Suggestions = [
   {
     type: 'value',
     value: '$string',
-    description: 'Any string in the event',
+    description: 'Any string value',
   },
   {
     type: 'value',
     value: '$number',
-    description: 'Any number in the event',
-  },
-  {
-    type: 'value',
-    value: '$boolean',
-    description: 'Any boolean in the event',
+    description: 'Any integer or float value',
   },
   {
     type: 'value',
     value: '$datetime',
-    description: 'Any datetime in the event',
+    description: 'Timestamps and dates',
   },
   {
     type: 'value',
     value: '$array',
-    description: 'Any array in the event',
+    description: 'Any JSON array value',
   },
   {
     type: 'value',
     value: '$object',
-    description: 'Any object in the event',
+    description: 'Any JSON object',
   },
   {
     type: 'value',
-    value: '$event',
-    description: 'Any event in the event',
-  },
-  {
-    type: 'value',
-    value: '$exception',
-    description: 'Any exception in the event',
+    value: '$error',
+    description: 'An exception instance',
   },
   {
     type: 'value',
     value: '$stacktrace',
-    description: 'Any stacktrace in the event',
+    description: 'A stacktrace instance',
   },
   {
     type: 'value',
     value: '$frame',
-    description: 'Any frame in the event',
+    description: 'A stacktrace frame',
   },
   {
     type: 'value',
-    value: '$request',
-    description: 'Any request in the event',
+    value: '$http',
+    description: 'HTTP request context',
   },
   {
     type: 'value',
     value: '$user',
-    description: 'Any user in the event',
+    description: 'User context',
   },
   {
     type: 'value',
-    value: '$logentry',
-    description: 'Any logentry in the event',
+    value: '$message',
+    description: 'The event message'
   },
   {
     type: 'value',
     value: '$thread',
-    description: 'Any thread in the event',
+    description: 'A thread instance',
   },
   {
     type: 'value',
     value: '$breadcrumb',
-    description: 'Any breadcrumb in the event',
+    description: 'A breadcrumb',
   },
   {
     type: 'value',
     value: '$span',
-    description: 'Any span in the event',
+    description: 'A trace span',
   },
   {
     type: 'value',
-    value: '$sdkv',
-    description: 'Any sdkv in the event',
+    value: '$sdk',
+    description: 'SDK name and version information',
   },
 ];
 
