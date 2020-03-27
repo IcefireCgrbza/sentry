@@ -52,7 +52,7 @@ class QueryCard extends React.PureComponent<Props> {
               <QueryDetail>{queryDetail}</QueryDetail>
             </QueryCardContent>
             {starred ? (
-              <UserAvatar user={createdBy} />
+              <StyledUserAvatar user={createdBy} />
             ) : (
               <Avatar>
                 <StyledIconSentry />
@@ -69,6 +69,13 @@ class QueryCard extends React.PureComponent<Props> {
     );
   }
 }
+
+const StyledUserAvatar = styled(UserAvatar)`
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  border: 3px solid ${p => p.theme.offWhite2};
+`;
 
 const QueryCardContent = styled('div')`
   flex-grow: 1;
