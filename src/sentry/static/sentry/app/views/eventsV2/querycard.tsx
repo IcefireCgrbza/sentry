@@ -6,6 +6,7 @@ import overflowEllipsis from 'app/styles/overflowEllipsis';
 import Link from 'app/components/links/link';
 import space from 'app/styles/space';
 import {callIfFunction} from 'app/utils/callIfFunction';
+import {IconSentry} from 'app/icons';
 import Card from 'app/components/card';
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
   queryDetail?: string;
   starred?: boolean;
   to: object;
+  createdBy: object;
   onEventClick?: () => void;
   renderGraph: () => React.ReactNode;
   renderContextMenu?: () => React.ReactNode;
@@ -36,6 +38,7 @@ class QueryCard extends React.PureComponent<Props> {
       queryDetail,
       renderContextMenu,
       renderGraph,
+      createdBy,
     } = this.props;
 
     return (
@@ -46,7 +49,13 @@ class QueryCard extends React.PureComponent<Props> {
               <QueryTitle>{title}</QueryTitle>
               <QueryDetail>{queryDetail}</QueryDetail>
             </QueryCardContent>
-            {starred && <Avatar data-test-id="is-saved-query" />}
+            {starred ? (
+              <Avatar data-test-id="is-saved-query">{createdBy}</Avatar>
+            ) : (
+              <Avatar>
+                <StyledIconSentry />
+              </Avatar>
+            )}
           </QueryCardHeader>
           <QueryCardBody>{renderGraph()}</QueryCardBody>
           <QueryCardFooter>
@@ -66,11 +75,20 @@ const QueryCardContent = styled('div')`
 `;
 
 const Avatar = styled('div')`
-  border: 2px solid ${p => p.theme.gray1};
+  border: 3px solid ${p => p.theme.offWhite2};
+  background-color: ${p => p.theme.gray4};
+  color: ${p => p.theme.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  min-width: ${space(4)};
-  width: ${space(4)};
-  height: ${space(4)};
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+`;
+
+const StyledIconSentry = styled(IconSentry)`
+  margin-bottom: 2px;
 `;
 
 const StyledQueryCard = styled(Card)`
