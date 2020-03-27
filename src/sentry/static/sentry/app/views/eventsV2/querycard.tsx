@@ -7,6 +7,8 @@ import Link from 'app/components/links/link';
 import space from 'app/styles/space';
 import {callIfFunction} from 'app/utils/callIfFunction';
 import {IconSentry} from 'app/icons';
+import UserAvatar from 'app/components/avatar/userAvatar';
+import {User} from 'app/types';
 import Card from 'app/components/card';
 
 type Props = {
@@ -15,7 +17,7 @@ type Props = {
   queryDetail?: string;
   starred?: boolean;
   to: object;
-  createdBy: object;
+  createdBy: User | undefined;
   onEventClick?: () => void;
   renderGraph: () => React.ReactNode;
   renderContextMenu?: () => React.ReactNode;
@@ -50,7 +52,7 @@ class QueryCard extends React.PureComponent<Props> {
               <QueryDetail>{queryDetail}</QueryDetail>
             </QueryCardContent>
             {starred ? (
-              <Avatar data-test-id="is-saved-query">{createdBy}</Avatar>
+              <UserAvatar user={createdBy} />
             ) : (
               <Avatar>
                 <StyledIconSentry />
