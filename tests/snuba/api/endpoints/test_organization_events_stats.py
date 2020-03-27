@@ -8,6 +8,7 @@ from datetime import timedelta
 
 from django.core.urlresolvers import reverse
 
+from sentry.discover.models import KeyTransaction
 from sentry.testutils import APITestCase, SnubaTestCase
 from sentry.testutils.helpers.datetime import iso_format, before_now
 from sentry.utils.compat import zip
@@ -17,6 +18,7 @@ class OrganizationEventsStatsEndpointTest(APITestCase, SnubaTestCase):
     def setUp(self):
         super(OrganizationEventsStatsEndpointTest, self).setUp()
         self.login_as(user=self.user)
+        self.authed_user = self.user
 
         self.day_ago = before_now(days=1).replace(hour=10, minute=0, second=0, microsecond=0)
 
@@ -571,3 +573,49 @@ class OrganizationEventsStatsEndpointTest(APITestCase, SnubaTestCase):
                 },
             )
         assert response.status_code == 400
+
+    def test_key_transaction_stats(self):
+        prototype = {
+            "type": "transaction",
+            "transaction": "api.issue.delete",
+            "spans": [],
+            "contexts": {"trace": {"op": "foobar", "trace_id": "a" * 32, "span_id": "a" * 16}},
+            "tags": {"important": "yes"},
+        }
+        fixtures = (
+            ("d" * 32, before_now(minutes=32)),
+            ("e" * 32, before_now(hours=1, minutes=2)),
+            ("f" * 32, before_now(hours=1, minutes=35)),
+        )
+        for fixture in fixtures:
+            data = prototype.copy()
+            data["event_id"] = fixture[0]
+            data["timestamp"] = iso_format(fixture[1])
+            data["start_timestamp"] = iso_format(fixture[1] - timedelta(seconds=1))
+            self.store_event(data=data, project_id=self.project.id)
+
+        KeyTransaction.objects.create(
+            owner=self.authed_user,
+            organization=self.project.organization,
+            transaction=prototype["transaction"],
+            project=self.project,
+        )
+
+        with self.feature("organizations:discover-basic"):
+            response = self.client.get(
+                self.url,
+                format="json",
+                data={
+                    "end": iso_format(before_now()),
+                    "start": iso_format(before_now(hours=2)),
+                    "interval": "30m",
+                    "yAxis": "count()",
+                    "keyTransactions": True,
+                },
+            )
+
+        assert response.status_code == 200, response.content
+        items = [item for time, item in response.data["data"] if item]
+        # We could get more results depending on where the 30 min
+        # windows land.
+        assert len(items) >= 3
